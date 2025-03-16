@@ -1,6 +1,7 @@
 import { useGetUserList } from "@/services/users";
 import { useMemo, useRef, useState } from "react";
 import ListUser from "@/components/ListUser";
+import Head from "next/head";
 
 interface QueryParams {
   q: string;
@@ -9,10 +10,10 @@ interface QueryParams {
 }
 
 const defaultQuery = {
-  q: 'user',
+  q: "user",
   limit: 5,
   per_page: 5,
-}
+};
 
 export default function Home() {
   const [query, setQuery] = useState<QueryParams>(defaultQuery);
@@ -21,9 +22,9 @@ export default function Home() {
   const { data, isLoading } = useGetUserList(query);
 
   const handleSearch = () => {
-    const name = refSearch?.current?.value
+    const name = refSearch?.current?.value;
     setQuery((prev) => ({ ...prev, q: String(name) }));
-  }
+  };
 
   const Loading = useMemo(() => {
     if (isLoading) {
@@ -41,18 +42,32 @@ export default function Home() {
 
   return (
     <div className="justify-items-center py-4 w-full h-screen p-4">
+      <Head>
+        <title>ATASK</title>
+      </Head>
       <main className="flex flex-col border border-gray-100 rounded-lg gap-y-2 p-2 min-h-[50vh] w-full sm:max-w-[60%] sm:items-start text-gray-600">
         <div className="flex flex-col w-full gap-y-2">
           <input
             ref={refSearch}
+            onKeyDown={(event) => {
+              if (event?.key === "Enter") {
+                handleSearch();
+              }
+            }}
             placeholder="Enter Username"
             className="p-2 rounded-sm text-gray-500 bg-gray-100 border border-gray-200 w-full"
           />
-          <button onClick={handleSearch} disabled={isLoading} className="bg-blue-400 hover:bg-blue-500 cursor-pointer disabled:opacity-60 p-2 text-white rounded-sm">
+          <button
+            onClick={handleSearch}
+            disabled={isLoading}
+            className="bg-blue-400 hover:bg-blue-500 cursor-pointer disabled:opacity-60 p-2 text-white rounded-sm"
+          >
             Search
           </button>
         </div>
-        <div>Showing user for &quot;Example&quot;</div>
+        {query?.q !== defaultQuery?.q && (
+          <div>Showing user for &quot;{query?.q}&quot;</div>
+        )}
         {/* list */}
 
         <div className="w-full min-h-20 relative">
