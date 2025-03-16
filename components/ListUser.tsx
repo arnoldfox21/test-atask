@@ -15,6 +15,7 @@ interface repos {
   name: string;
   id: number;
   description: string;
+  stargazers_count: string;
 }
 
 const ListUser: React.FC<ListUserProps> = ({ data }) => {
@@ -47,7 +48,7 @@ const ListUser: React.FC<ListUserProps> = ({ data }) => {
   return (
     <div className="w-full flex flex-col gap-y-3">
       {data?.map((value) => (
-        <div className="flex flex-col z-10" key={value?.id}>
+        <div className="flex flex-col z-10 w-full" key={value?.id}>
           <button
             type="button"
             onClick={() => handleOpen(value)}
@@ -90,7 +91,7 @@ const ListUser: React.FC<ListUserProps> = ({ data }) => {
                   </div>
                   <div className="flexitems-start">
                     <div className="items-center gap-x-3 flex">
-                      <span className="font-bold">{value?.score}</span>
+                      <span className="font-bold">{field?.stargazers_count}</span>
                       <svg
                         width="20"
                         height="20"
